@@ -1,0 +1,56 @@
+[workspace]
+members = [
+    "crates/pivlib",
+    "crates/pivlib_cli",
+    "crates/pivlib_fixtures",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license-file = "LICENSE.md"
+authors = ["Ari Ugwu <ari@thirteendelta.com>"]
+repository = "https://github.com/ariugwu/pivlib"
+homepage = "https://github.com/ariugwu/pivlib"
+keywords = ["piv", "x509", "fips-201", "cbeff", "incits"]
+categories = ["command-line-utilities", "cryptography", "parsing"]
+
+[workspace.dependencies]
+# Pin RustCrypto stack at versions known to play together on stable Rust.
+der = { version = "0.7", default-features = false, features = ["alloc", "derive", "oid"] }
+spki = { version = "0.7", default-features = false, features = ["alloc"] }
+x509-cert = { version = "0.2", default-features = false, features = ["pem", "std"] }
+cms = { version = "0.2", default-features = false, features = ["std"] }
+pkcs8 = { version = "0.10", default-features = false, features = ["alloc", "pem", "pkcs5", "encryption"] }
+pkcs12 = { version = "0.1", default-features = false }
+const-oid = { version = "0.9", default-features = false, features = ["db"] }
+pem-rfc7468 = { version = "0.7", default-features = false, features = ["alloc"] }
+flagset = "0.4"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = { version = "0.22", default-features = false, features = ["alloc"] }
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
+sha2 = { version = "0.10", default-features = false }
+thiserror = "1"
+
+# WASM — pinned to match the installed wasm-bindgen-cli (0.2.121). The
+# bindgen format is unstable across patches; mismatched versions hard-error.
+wasm-bindgen = "=0.2.121"
+wasm-bindgen-futures = "0.4"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = ["console"] }
+serde-wasm-bindgen = "0.6"
+console_error_panic_hook = "0.1"
+
+# Biometric pipeline
+image = { version = "0.25", default-features = false, features = ["jpeg"] }
+bytes = "1"
+log = "0.4"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true

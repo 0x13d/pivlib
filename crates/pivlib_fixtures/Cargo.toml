@@ -1,0 +1,35 @@
+[package]
+name = "pivlib_fixtures"
+description = "Synthetic test fixtures for pivlib — generates the demo corpus consumed by Rust integration tests and the web demo. Not published."
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish = false
+
+[[bin]]
+name = "pivlib_fixtures"
+path = "src/main.rs"
+
+[dependencies]
+pivlib = { path = "../pivlib", features = ["nbis"] }
+
+der = { workspace = true }
+spki = { workspace = true }
+x509-cert = { version = "0.2", default-features = false, features = ["pem", "std", "builder", "hazmat"] }
+cms = { workspace = true }
+pkcs8 = { workspace = true }
+pkcs12 = { workspace = true }
+const-oid = { workspace = true }
+pem-rfc7468 = { workspace = true }
+
+p256 = { version = "0.13", default-features = false, features = ["alloc", "ecdsa", "pkcs8", "std"] }
+ecdsa = { version = "0.16", default-features = false, features = ["pem", "der"] }
+signature = { version = "2.2", default-features = false, features = ["std", "rand_core"] }
+rand_core = { version = "0.6", features = ["std", "getrandom"] }
+
+flagset = { workspace = true }
+sha2 = { workspace = true, features = ["oid"] }
+image = { workspace = true }

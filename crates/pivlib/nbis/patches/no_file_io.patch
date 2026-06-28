@@ -1,0 +1,91 @@
+This patch targets NBIS 5.0.0 (Rel_5.0.0.zip from NIST).
+It makes one change to the WSQ library: removes `static` from the
+internal FILE*-based decode function so the shim in nbis/shims/wsq_mem.c
+can call it via fmemopen without touching NBIS internals further.
+
+No changes are needed in mindtct — lfs_detect_minutiae_V2() already
+accepts a raw pixel buffer.
+
+---
+
+How to apply
+============
+From the root of the repo:
+
+    patch -p1 < nbis/patches/no_file_io.patch
+
+Then rebuild:
+
+    wasm-pack build --features nbis
+
+---
+
+Patch
+=====
+
+--- a/nbis/wsq/lib/src/wsq/dec.c
++++ b/nbis/wsq/lib/src/wsq/dec.c
+@@ -1,4 +1,4 @@
+-/* NBIS wsq/lib/src/wsq/dec.c — excerpt showing the static function to expose */
++/* NBIS wsq/lib/src/wsq/dec.c — wsq_decode_file_fp made non-static */
+
+ /*
+  * Search for the line that begins the internal FILE*-based decode function.
+@@ -50,7 +50,7 @@
+  * It typically looks like one of:
+  *
+  *   static int wsq_decode_file_fp(...)
+- *   static int wsq_decode_impl(...)
+- *   static int wsq_decode_from_fpf(...)
++ *   static int wsq_decode_impl(...)    <-- REMOVE "static" from whichever matches
++ *   static int wsq_decode_from_fpf(...)
+  *
+  * Use: grep -n "^static int wsq_decode" nbis/wsq/lib/src/wsq/dec.c
+  * to find the exact name in your NBIS version, then remove "static".
+@@ -60,7 +60,7 @@
+  * BEFORE (example — your function name may differ):
+  */
+-static int wsq_decode_file_fp(unsigned char **odata, int *owidth, int *oheight,
+-                               int *odepth, int *oppmm, const int rawflag,
+-                               FILE *fp)
++int wsq_decode_file_fp(unsigned char **odata, int *owidth, int *oheight,
++                        int *odepth, int *oppmm, const int rawflag,
++                        FILE *fp)
+ {
+     /* ... NBIS implementation unchanged ... */
+
+--- a/nbis/wsq/lib/include/wsq.h
++++ b/nbis/wsq/lib/include/wsq.h
+@@ -1,4 +1,4 @@
+ /* nbis/wsq/lib/include/wsq.h */
++
++/* Exposed for in-memory decode shim (nbis/shims/wsq_mem.c) */
++extern int wsq_decode_file_fp(unsigned char **odata, int *owidth, int *oheight,
++                               int *odepth, int *oppmm, const int rawflag,
++                               FILE *fp);
+
+---
+
+Manual steps if patch doesn't apply cleanly
+============================================
+
+1.  Find the internal function name:
+
+        grep -n "^static int wsq_decode" nbis/wsq/lib/src/wsq/dec.c
+
+    You will see one line such as:
+        123:static int wsq_decode_file_fp(unsigned char **odata, ...
+
+2.  Remove the word "static" from that line (keep everything else).
+
+3.  Add the extern declaration to wsq/lib/include/wsq.h,
+    using the exact function signature you found in step 1.
+
+4.  Update the function name in nbis/shims/wsq_mem.c if it differs
+    from "wsq_decode_file_fp".  The relevant line is:
+
+        int ret = wsq_decode_file_fp(odata, owidth, oheight, ...);
+
+That's the entire change. Everything else — fmemopen, the bare-WASM
+fallback FILE shim, minutiae extraction — is handled by nbis/shims/
+without touching NBIS source.

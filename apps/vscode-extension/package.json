@@ -1,0 +1,78 @@
+{
+  "name": "pivlib",
+  "displayName": "pivlib",
+  "description": "Inspect PIV/PKI files (certs, CSRs, CRLs, PKCS#7/#12 envelopes, CHUID/CCC/SecurityObject containers) side by side with the editor. Detects any encoding (DER, PEM, base64-of-DER, hex-of-DER, PKCS#7, PKCS#12) and shows you what you've got.",
+  "version": "0.1.0",
+  "publisher": "0x13d",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Ari Ugwu <ari@thirteendelta.com>",
+  "homepage": "https://github.com/0x13d/pivlib#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x13d/pivlib.git",
+    "directory": "apps/vscode-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/0x13d/pivlib/issues"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "piv",
+    "x509",
+    "pkcs7",
+    "pkcs12",
+    "fips-201"
+  ],
+  "icon": "media/icon.png",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:plaintext",
+    "onLanguage:json",
+    "onCommand:pivlib.inspectActiveFile"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "pivlib.inspectActiveFile",
+        "title": "Inspect with pivlib",
+        "category": "pivlib",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "pivlib.detectEncoding",
+        "title": "Detect Encoding",
+        "category": "pivlib"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "pivlib.inspectActiveFile",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build:wasm": "node scripts/copy-wasm.mjs",
+    "build:extension": "node esbuild.config.mjs",
+    "build:webview": "node esbuild.config.mjs --webview",
+    "build": "npm run build:wasm && npm run build:extension && npm run build:webview",
+    "watch": "node esbuild.config.mjs --watch",
+    "package": "npm run build && vsce package --no-dependencies",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.2.1",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,20 @@
+target/
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+
+# Vendored runtime / build artefacts
+packages/pivlib/wasm/
+packages/pivlib/wasm-node/
+apps/vscode-extension/dist/
+apps/vscode-extension/*.vsix
+apps/web/dist/
+
+# Trust-report raw evidence (only summary.md is committed)
+reports/trust/*
+!reports/trust/summary.md
+
+# NBIS build noise
+crates/pivlib/nbis/**/*.o
+crates/pivlib/nbis/**/*.a

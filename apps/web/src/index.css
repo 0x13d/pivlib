@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply font-sans bg-paper text-ink;
+    font-feature-settings: 'ss01', 'ss02', 'cv11';
+    background-image:
+      radial-gradient(1200px 600px at 50% -10%, rgba(30, 79, 184, 0.08), transparent 70%),
+      radial-gradient(800px 500px at 90% 110%, rgba(14, 15, 18, 0.06), transparent 70%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(30, 79, 184, 0.22);
+    color: #0e0f12;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .glass {
+    background: rgba(247, 244, 238, 0.72);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+  }
+  .field {
+    @apply font-mono text-[12.5px] bg-paperDim border border-ink/10 rounded-md p-3 overflow-x-auto leading-[1.55];
+  }
+  .pill {
+    @apply inline-block px-2.5 py-0.5 rounded-full bg-paperDim border border-ink/10 text-[11px] uppercase tracking-[0.18em] text-inkSoft;
+  }
+}
