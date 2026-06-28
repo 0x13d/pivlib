@@ -1,15 +1,15 @@
 # Charter — pivlib
 
-> Links this project to the [portfolio](../../../PORTFOLIO.md) and its governing
-> [C-suite](../../../.claude/reference/management-team/README.md). The charter test: every project serves
-> at least one of the [five goals](../../../.claude/reference/management-team/strategic-themes.md).
+> Links this project to the [portfolio](https://ariugwu.com) and its governing
+> C-suite. The charter test: every project serves
+> at least one of the five goals.
 
 | | |
 |---|---|
 | **Primary goal** | **Career Relevancy Showcase** |
 | **Owning officers** | CSO (PKI / key material / crypto) + CPO (product) |
 | **Supporting** | CCO (standards-conformance claims), CIO (monorepo shape), CMO (framing) |
-| **Team** | [software-team](../../../.claude/reference/software-team/README.md) — Rust+WASM+CLI+npm+web+VSCode (prefix `PL-`) |
+| **Team** | software-team — Rust+WASM+CLI+npm+web+VSCode (prefix `PL-`) |
 
 ## How it serves the goal
 
