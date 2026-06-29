@@ -1,0 +1,14 @@
+{
+  "name": "pivlib-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Build/deploy orchestration for the pivlib library + web brochure. deploy → netlify (apps/web), release → tarballs into the central _releases/ feed. (Non-NBIS build; full NBIS build via `make wasm-nbis` — see CLAUDE.md.)",
+  "scripts": {
+    "pin:wasm": "cargo update -p wasm-bindgen --precise 0.2.121",
+    "build:lib": "npm run pin:wasm && cd packages/pivlib && npm install --no-audit --no-fund && npm run build",
+    "build:web": "npm run build:lib && cd apps/web && npm install --no-audit --no-fund && npm run build",
+    "build": "npm run build:web",
+    "deploy": "npm run build && netlify deploy --prod --dir=apps/web/dist",
+    "release": "npm run build:lib && mkdir -p ../../_releases/npm && npm pack ./packages/pivlib --pack-destination ../../_releases/npm && npm pack ./packages/pivlib-cli --pack-destination ../../_releases/npm"
+  }
+}
